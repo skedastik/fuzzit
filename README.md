@@ -1,0 +1,1 @@
+Image fingerprinting micro service
