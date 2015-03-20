@@ -16,6 +16,6 @@ skel:
 	npm install mocha chai --save-dev
 
 clean:
-	rm var/*
+	rm -f var/*
 
 .PHONY: clean test jshint skel
