@@ -6,13 +6,13 @@ test:
 	@NODE_ENV=test ./node_modules/.bin/mocha --recursive --reporter $(REPORTER) --timeout 3000
 
 jshint:
-	jshint lib test index.js
+	jshint lib test app.js
 
 tests: test
 
 skel:
 	mkdir example test
-	touch index.js
+	touch app.js
 	npm install mocha chai --save-dev
 
 clean:
