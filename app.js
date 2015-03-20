@@ -1,6 +1,5 @@
 var express = require('express');
 var async = require('async');
-var fs = require('fs');
 var phash = require('phash-image');
 var _ = require('underscore');
 var conf = require('./conf/conf');
