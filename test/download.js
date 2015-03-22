@@ -24,6 +24,20 @@ describe('download', function() {
                 done();
             });
         });
+        
+        it('should fail to download a non-image file', function(done) {
+            download.image(baseURL + 'textfile.txt', function(error) {
+                assert.isNotNull(error, 'error should not be null');
+                done();
+            });
+        });
+        
+        it('should download an image file', function(done) {
+            download.image(baseURL + 'england.jpg', function(error) {
+                assert.isNull(error, 'error should be null');
+                done();
+            });
+        });
     });
     
     after(function() {
