@@ -49,6 +49,18 @@ describe('download', function() {
         });
     });
     
+    describe('#multiple', function() {
+        it('should download multiple valid images', function(done) {
+            download.multiple(
+                [baseURL + 'latrobe.jpg', baseURL + 'england.jpg'],
+                function(error, paths) {
+                    assert.notOk(error, 'download.multiple should not trigger an error');
+                    done();
+                }
+            );
+        });
+    });
+    
     after(function() {
         server.close();
     });
