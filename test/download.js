@@ -4,6 +4,7 @@ var express = require('express');
 var assert = require('chai').assert;
 var download = require('../lib/download');
 var conf = require('../conf/conf');
+var fs = require('fs');
 
 var app;
 var server;
@@ -40,9 +41,12 @@ describe('download', function() {
         });
         
         it('should download a valid image', function(done) {
-            download.image(baseURL + 'england.jpg', function(error) {
+            download.image(baseURL + 'latrobe.jpg', function(error, path) {
                 assert.isNull(error, 'error should be null');
-                done();
+                fs.exists(path, function(exists) {
+                    assert.ok(exists, 'file should exist after downloading');
+                    done();
+                });
             });
         });
     });
