@@ -13,7 +13,7 @@ var bed = function() {
         app = express();
         app.use('/static', express.static('./static'));
         server = app.listen(conf.server.port);
-        staticBaseURL = 'http://' + server.address().address + ':' + conf.server.port + '/static/';
+        staticBaseURL = 'http://0.0.0.0:' + conf.server.port + '/static/';
     }
     
     function teardown() {
