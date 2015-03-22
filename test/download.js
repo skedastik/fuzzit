@@ -18,21 +18,28 @@ describe('download', function() {
     });
     
     describe('#image', function() {
-        it('should fail to download a non-existent file', function(done) {
+        it('should fail for a non-existent file', function(done) {
             download.image(baseURL + 'johndoe.jpg', function(error) {
                 assert.isNotNull(error, 'error should not be null');
                 done();
             });
         });
         
-        it('should fail to download a non-image file', function(done) {
+        it('should fail for a non-image file', function(done) {
             download.image(baseURL + 'textfile.txt', function(error) {
                 assert.isNotNull(error, 'error should not be null');
                 done();
             });
         });
         
-        it('should download an image file', function(done) {
+        it('should fail for an image larger than ' + conf.contentLengthLimit + ' bytes', function(done) {
+            download.image(baseURL + 'large_image-john_singer_sargent.jpg', function(error) {
+                assert.isNotNull(error, 'error should not be null');
+                done();
+            });
+        });
+        
+        it('should download a valid image', function(done) {
             download.image(baseURL + 'england.jpg', function(error) {
                 assert.isNull(error, 'error should be null');
                 done();
