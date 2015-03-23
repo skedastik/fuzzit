@@ -8,6 +8,7 @@ var download = require('./lib/download');
 var fingerprint = require('./lib/fingerprint');
 
 var app = express();
+var server = app.listen(conf.server.port);
 
 app.use('/static', express.static('./static'));
 
@@ -35,5 +36,3 @@ function respond(response, error, hash) {
         response.send(hash);
     }
 }
-
-var server = app.listen(conf.server.port);
