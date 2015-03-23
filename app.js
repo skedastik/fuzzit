@@ -10,8 +10,6 @@ var fingerprint = require('./lib/fingerprint');
 var app = express();
 var server = app.listen(conf.server.port);
 
-app.use('/static', express.static('./static'));
-
 app.get('/', function(request, response) {
     var url = request.query.url;
     
