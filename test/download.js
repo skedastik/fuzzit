@@ -11,6 +11,13 @@ describe('download', function() {
     });
     
     describe('#image', function() {
+        it('should fail when given a bad URL', function(done) {
+            download.image('borktp://lol', function(error) {
+                assert.ok(error);
+                done();
+            });
+        });
+        
         it('should fail for a non-existent file', function(done) {
             download.image(testbed.getStaticBaseURL() + 'johndoe.jpg', function(error) {
                 assert.ok(error);
