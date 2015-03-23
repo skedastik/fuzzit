@@ -1,19 +1,39 @@
+// TODO: Logging
+// TODO: Caching
+
 var express = require('express');
 var async = require('async');
 var conf = require('./conf/conf');
+var download = require('./lib/download');
+var fingerprint = require('./lib/fingerprint');
 
 var app = express();
+
+app.use('/static', express.static('./static'));
 
 app.get('/', function(request, response) {
     var url = request.query.url;
     
     if (typeof url == 'string') {
-        // TODO: send fingerprints
-        response.send('[]');
+        async.waterfall([
+            async.apply(download.image, decodeURIComponent(url)),
+            fingerprint.derive,
+        ], async.apply(respond, response));
     } else {
-        // TODO: appropriate error response code
-        response.send('[]');
+        response
+            .status(400)
+            .send('Bad Request.');
     }
 });
+
+function respond(response, error, hash) {
+    if (error) {
+        response
+            .status(500)
+            .send('Error: ' + error);
+    } else {
+        response.send(hash);
+    }
+}
 
 var server = app.listen(conf.server.port);
