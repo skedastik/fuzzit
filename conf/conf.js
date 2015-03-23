@@ -1,6 +1,6 @@
 var conf = {
     server: {
-        port: 3000
+        port: process.env.PORT || 3000
     },
     
     // fingerprint string encoding
