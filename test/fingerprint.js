@@ -41,7 +41,7 @@ describe('fingerprint', function() {
                     'test/sample/orig-copy.jpg'
                 ],
                 function(error, hashes) {
-                    assert(hashes[0] == hashes[1]);
+                    assert(hashes[0] === hashes[1]);
                     done();
                 }
             );

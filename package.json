@@ -16,7 +16,8 @@
     "request": "^2.53.0"
   },
   "devDependencies": {
-    "mocha": "^2.2.1"
+    "mocha": "^2.2.1",
+    "hippie": "^0.3.0"
   },
   "scripts": {
     "test": "mocha",
