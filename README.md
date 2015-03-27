@@ -9,7 +9,7 @@ A fuzzy image fingerprinting microservice.
 
 ## Supplemental
 
-Results of running pHash 0.9.6 against various attacks (see images in test/sample/):
+Fuzzit uses [pHash](http://www.phash.org/) to generate fuzzy image hashes. Following are the results of running pHash 0.9.6 against various attacks (see images in test/sample/):
 
 ```
 INPUT                            HASH                  HAMMING DISTANCE
