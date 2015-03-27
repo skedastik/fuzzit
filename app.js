@@ -1,5 +1,6 @@
 // TODO: Clear var/ after processing
 // TODO: Logging
+// TODO: Clustering
 // TODO: Caching
 
 var express = require('express');
