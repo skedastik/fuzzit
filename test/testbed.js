@@ -2,18 +2,18 @@
 
 var express = require('express');
 var assert = require('chai').assert;
-var conf = require('../conf/conf');
 
 var bed = function() {
     var app;
     var server;
+    var port = 3000;
     var staticBaseURL;
     
     function setup() {
         app = express();
         app.use('/static', express.static('./static'));
-        server = app.listen(conf.server.port);
-        staticBaseURL = 'http://127.0.0.1:' + conf.server.port + '/static/';
+        server = app.listen(port);
+        staticBaseURL = 'http://127.0.0.1:' + port + '/static/';
     }
     
     function teardown() {
