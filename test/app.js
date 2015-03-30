@@ -47,7 +47,7 @@ describe('app', function() {
             .expectStatus(200)
             .end(function(error, response, body) {
                 assert.notOk(error);
-                assert.ok(body.hashes);
+                assert.ok(body.results);
                 done();
             });
         });
@@ -61,7 +61,7 @@ describe('app', function() {
             ])))
             .expectStatus(200)
             .end(function(error, response, body) {
-                assert.ok(body.hashes[0] === body.hashes[1]);
+                assert.ok(body.results[0].hash === body.results[1].hash);
                 done();
             });
         });
