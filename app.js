@@ -17,22 +17,12 @@ app.get('/', function(request, response) {
     
     if (typeof encodedUrl == 'string') {
         var url = JSON.parse(decodeURIComponent(encodedUrl));
-        var tasks;
         
-        if (Array.isArray(url)) {
-            // NOTE: If a single download fails, the entire request fails :(
-            tasks = [
-                async.apply(download.multiple, url),
-                fingerprint.deriveMultiple,
-            ];
-        } else {
-            tasks = [
-                async.apply(download.image, url),
-                fingerprint.derive,
-            ];
-        }
-        
-        async.waterfall(tasks, async.apply(handleOk, response));
+        // NOTE: If a single download fails, the entire request fails :(
+        async.waterfall([
+            async.apply(download.multiple, Array.isArray(url) ? url : [url]),
+            fingerprint.deriveMultiple,
+        ], async.apply(handleOk, response));
     } else {
         response
             .status(400)
