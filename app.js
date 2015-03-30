@@ -8,6 +8,7 @@ var async = require('async');
 var conf = require('./conf/conf');
 var download = require('./lib/download');
 var fingerprint = require('./lib/fingerprint');
+var payload = require('./lib/payload');
 
 var app = express();
 var server = app.listen(conf.server.port);
@@ -36,9 +37,7 @@ function handleOk(response, error, hashes) {
             .status(500)
             .send('Error: ' + error);
     } else {
-        response.send(JSON.stringify({
-            'hashes': Array.isArray(hashes) ? hashes : [hashes]
-        }));
+        response.send(payload.asJSON(hashes));
     }
 }
 
