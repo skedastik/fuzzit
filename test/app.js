@@ -26,18 +26,6 @@ describe('app', function() {
             });
         });
         
-        it('should respond with status code 500 for a server error', function(done) {
-            hippie()
-            .json()
-            .get(apiBaseURL + '?url=' + encodeURIComponent(JSON.stringify(
-                staticBaseURL + 'not_an_image.jpg'
-            )))
-            .expectStatus(500)
-            .end(function(error, response, body) {
-                done();
-            });
-        });
-        
         it('should return a hash for a valid image URL', function(done) {
             hippie()
             .json()
@@ -47,7 +35,21 @@ describe('app', function() {
             .expectStatus(200)
             .end(function(error, response, body) {
                 assert.notOk(error);
-                assert.ok(body.results);
+                assert.ok(body.results[0].hash);
+                done();
+            });
+        });
+        
+        it('should return an error string for a invalid image URL', function(done) {
+            hippie()
+            .json()
+            .get(apiBaseURL + '?url=' + encodeURIComponent(JSON.stringify(
+                staticBaseURL + 'non-existent-image.jpg'
+            )))
+            .expectStatus(200)
+            .end(function(error, response, body) {
+                assert.notOk(error);
+                assert(typeof body.results[0] == "string");
                 done();
             });
         });
