@@ -7,9 +7,7 @@ var conf = {
     hashEncoding: 'hex',
     
     // maximum input image size in octets
-    contentLengthLimit: (1 << 20) * 1,
-    
-    downloadPath: 'var/'
+    contentLengthLimit: (1 << 20) * 1
 };
 
 module.exports = conf;

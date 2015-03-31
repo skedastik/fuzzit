@@ -1,72 +1,60 @@
-// TODO: Clear var/ after processing
 // TODO: Logging
 // TODO: Clustering
 // TODO: Caching
 
+'use strict';
+
 var express = require('express');
-var async = require('async');
+var Promise = require('bluebird');
+var ghash = require('ghash');
 var conf = require('./conf/conf');
 var download = require('./lib/download');
-var fingerprint = require('./lib/fingerprint');
 var Payload = require('./lib/payload');
 
 var app = express();
 var server = app.listen(conf.server.port);
 
+module.exports = {
+    'app': app,
+    'server': server
+}
+
 app.get('/', function(request, response) {
     var encodedUrl = request.query.url;
-    
     try {
         var url = JSON.parse(decodeURIComponent(encodedUrl));
     } catch (e) {
         return handleBadRequest(response);
     }
-    
-    async.map(
+    Promise.map(
         Array.isArray(url) ? url : [url],
-        process,
-        async.apply(handleOk, response)
-    );
+        process
+    ).then(function(data) {
+        var payload = new Payload(data);
+        response.send(payload.asJSON());
+    });
 });
 
-function handleOk(response, error, result) {
-    var payload = new Payload(result);
-    response.send(payload.asJSON());
+function process(url) {
+    return download(url).then(function(data) {
+        return ghash(data.buffer).calculate().then(function(hash) {
+            return {
+                hash: hash.toString(conf.hashEncoding),
+                headers: data.headers
+            };
+        });
+    }).catch(handleProcessingError);
+}
+
+function handleProcessingError(error) {
+    if (error instanceof ReferenceError) {
+        throw error;
+    }
+    return { error: error.toString() };
 }
 
 function handleBadRequest(response) {
     response
-        .status(400)
-        .send('Bad Request');
-}
-
-function process(url, callback) {
-    async.waterfall([
-        async.apply(download.image, url),
-        processDownload
-    ], function(error, result) {
-        if (error) return handleProcessingError(error, callback);
-        callback(null, result);
-    });
-}
-
-function processDownload(fileInfo, callback) {
-    fingerprint.derive(fileInfo.path, function(error, hash) {
-        if (error) return handleProcessingError(error, callback);
-        callback(null, {
-            hash: hash,
-            headers: fileInfo.headers
-        });
-    });
-}
-
-function handleProcessingError(error, callback) {
-    callback(null, {
-        error: error
-    });
-}
-
-module.exports = {
-    'app': app,
-    'server': server
+    .status(400)
+    .send('Bad Request');
 }
