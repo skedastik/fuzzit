@@ -33,9 +33,9 @@ describe('app', function() {
                 staticBaseURL + 'latrobe.jpg'
             )))
             .expectStatus(200)
-            .end(function(error, response, body) {
+            .end(function(error, response, results) {
                 assert.notOk(error);
-                assert.ok(body.results[0].hash);
+                assert.ok(results[0].hash);
                 done();
             });
         });
@@ -47,9 +47,9 @@ describe('app', function() {
                 staticBaseURL + 'non-existent-image.jpg'
             )))
             .expectStatus(200)
-            .end(function(error, response, body) {
+            .end(function(error, response, results) {
                 assert.notOk(error);
-                assert(typeof body.results[0] == "string");
+                assert.ok(results[0].error);
                 done();
             });
         });
@@ -62,8 +62,8 @@ describe('app', function() {
                 staticBaseURL + 'latrobe.jpg'
             ])))
             .expectStatus(200)
-            .end(function(error, response, body) {
-                assert.ok(body.results[0].hash === body.results[1].hash);
+            .end(function(error, response, results) {
+                assert.ok(results[0].hash === results[1].hash);
                 done();
             });
         });

@@ -8,7 +8,7 @@ var async = require('async');
 var conf = require('./conf/conf');
 var download = require('./lib/download');
 var fingerprint = require('./lib/fingerprint');
-var payload = require('./lib/payload');
+var Payload = require('./lib/payload');
 
 var app = express();
 var server = app.listen(conf.server.port);
@@ -29,8 +29,9 @@ app.get('/', function(request, response) {
     );
 });
 
-function handleOk(response, error, results) {
-    response.send(payload.asJSON(results));
+function handleOk(response, error, result) {
+    var payload = new Payload(result);
+    response.send(payload.asJSON());
 }
 
 function handleBadRequest(response) {
@@ -44,18 +45,24 @@ function process(url, callback) {
         async.apply(download.image, url),
         processDownload
     ], function(error, result) {
-        if (error) return callback(null, "Error: " + error);
+        if (error) return handleProcessingError(error, callback);
         callback(null, result);
     });
 }
 
 function processDownload(fileInfo, callback) {
     fingerprint.derive(fileInfo.path, function(error, hash) {
-        if (error) return callback(error);
+        if (error) return handleProcessingError(error, callback);
         callback(null, {
             hash: hash,
             headers: fileInfo.headers
         });
+    });
+}
+
+function handleProcessingError(error, callback) {
+    callback(null, {
+        error: error
     });
 }
 
