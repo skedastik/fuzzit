@@ -17,12 +17,12 @@ var server = app.listen(conf.server.port);
 module.exports = {
     'app': app,
     'server': server
-}
+};
 
 app.get('/', function(request, response) {
-    var encodedUrl = request.query.url;
+    var url = request.query.url;
     try {
-        var url = JSON.parse(decodeURIComponent(encodedUrl));
+        url = JSON.parse(decodeURIComponent(url));
     } catch (e) {
         return handleBadRequest(response);
     }
@@ -37,7 +37,7 @@ app.get('/', function(request, response) {
 
 function process(url) {
     return download(url).then(function(data) {
-        return ghash(data.buffer).calculate().then(function(hash) {
+        return ghash(data.path).calculate().then(function(hash) {
             return {
                 hash: hash.toString(conf.hashEncoding),
                 headers: data.headers

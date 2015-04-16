@@ -1,5 +1,7 @@
 // test
 
+'use strict';
+
 var chai = require('chai');
 var chaiAsPromised = require('chai-as-promised');
 var download = require('../lib/download');

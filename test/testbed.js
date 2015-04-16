@@ -1,5 +1,7 @@
 // reusable testbed
 
+'use strict';
+
 var express = require('express');
 var assert = require('chai').assert;
 
